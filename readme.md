@@ -19,6 +19,11 @@ Asegúrate de tener instalados los siguientes componentes en tu entorno local:
 ### 1. Crear un entorno virtual (opcional pero recomendado)
 
 ```bash
+py -m venv venv
+```
+o
+
+```bash
 python -m venv venv
 ```
 
@@ -30,7 +35,7 @@ Activa el entorno virtual:
   ```
   **(Git Bash)**
   ```bash
-  source .venv/Scripts/activate
+  source venv/Scripts/activate
   ```
 
 - **macOS/Linux:**  
@@ -39,6 +44,7 @@ Activa el entorno virtual:
   ```
 
 ### 2. Instalar dependencias
+Ejecutar en la ruta al nivel de app/ y tests/ 
 
 ```bash
 pip install -r requirements.txt
@@ -48,14 +54,15 @@ pip install -r requirements.txt
 
 ### 3. Configurar Variables de Entorno
 
-Crea un archivo `.env` en el directorio raíz del proyecto con las siguientes variables de entorno. Asegúrate de reemplazar los valores con tu configuración:
+Crea un archivo `.env` en el directorio raíz del proyecto a nivel de app/ con las siguientes variables de entorno. Asegúrate de reemplazar los valores con tu configuración:
 
 ```ini
 # Archivo .env
 
 # URL de la base de datos
-DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/nombre_base_datos #Ejemplo postgres
-DATABASE_URL=sqlite:///./library.db #Ejemplo sqlite
+DATABASE_URL=sqlite:///./library.db #default sqlite
+#DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/nombre_base_datos #Ejemplo postgres
+
 # Variables de seguridad
 SECRET_KEY=tu_clave_secreta
 ALGORITHM=HS256
@@ -76,6 +83,19 @@ Esto iniciará el servidor en `http://127.0.0.1:8000`. La opción `--reload` per
 
 ---
 
+## **Pruebas**
+Puedes ejecutar las pruebas con `pytest` en el directorio al nivel de app y tests:
+
+```bash
+pytest
+```
+**Con Información de covertura**
+```bash
+pytest --cov=app tests
+```
+---
+
+---
 ## **Acceso a la Documentación Interactiva**
 
 La documentación interactiva de la API está disponible en Swagger UI:
@@ -152,16 +172,6 @@ Si estás utilizando Alembic para la gestión de migraciones de base de datos, s
    ```bash
    alembic upgrade head
    ```
-
----
-
-## **Pruebas**
-
-Si tienes pruebas configuradas, puedes ejecutarlas con `pytest`:
-
-```bash
-pytest
-```
 
 ---
 
