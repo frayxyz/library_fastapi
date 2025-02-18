@@ -1,6 +1,9 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from .database import engine, Base
 from .routers import users, authors, books, loans
+
+load_dotenv()
 
 app = FastAPI()
 

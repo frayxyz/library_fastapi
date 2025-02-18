@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -5,8 +7,14 @@ from fastapi.testclient import TestClient
 from app.main import app 
 from app.database import Base, get_db  
 
+load_dotenv()
+# Debugging: Print the loaded variables to confirm
+print("Loaded SECRET_KEY:", os.getenv("SECRET_KEY"))
+print("Loaded ALGORITHM:", os.getenv("ALGORITHM"))
+print("Loaded ACCESS_TOKEN_EXPIRE_MINUTES:", os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+
 # Crear la base de datos SQLite en memoria o archivo para pruebas
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # También puedes usar ":memory:"
+SQLALCHEMY_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "sqlite:///./test.db") 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
