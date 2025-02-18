@@ -157,24 +157,6 @@ Este flujo asegura que todas las acciones se realicen en el orden correcto y con
 
 ---
 
-## **Migraciones de Base de Datos**
-
-Si estás utilizando Alembic para la gestión de migraciones de base de datos, sigue estos pasos:
-
-1. **Crear una nueva migración:**
-
-   ```bash
-   alembic revision --autogenerate -m "mensaje_de_la_migración"
-   ```
-
-2. **Aplicar la migración a la base de datos:**
-
-   ```bash
-   alembic upgrade head
-   ```
-
----
-
 ## **Estructura del Proyecto**
 
 La estructura básica del proyecto es la siguiente:
