@@ -27,14 +27,12 @@ def search_books( title: str | None = None, author: str | None = None, year: int
     if author:
         query = query.join(AuthorModel).filter(AuthorModel.name.ilike(f"%{author}%"))
 
-    # Filtros dinámicos
     filters = []
     if title:
-        filters.append(BookModel.title.ilike(f"%{title}%"))  # Búsqueda parcial insensible a mayúsculas/minúsculas
+        filters.append(BookModel.title.ilike(f"%{title}%"))
     if year:
         filters.append(BookModel.publication_year == year)
 
-    # Combinar los filtros con AND si existen
     if filters:
         query = query.filter(and_(*filters))
 
@@ -67,7 +65,28 @@ def update_book(book_id: int, book_update: BookCreate, db: Session = Depends(get
     db.refresh(db_book)
     return db_book
 
-@router.delete("/{book_id}", response_model=dict)
+@router.delete("/{book_id}", response_model=dict, responses={
+    200: {
+        "description": "Successful deletion",
+        "content": {
+            "application/json": {
+                "example": {
+                    "message": "Book deleted successfully"
+                }
+            }
+        }
+    },
+    404: {
+        "description": "Book not found",
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Book not found"
+                }
+            }
+        }
+    }
+})
 def delete_book(book_id: int, db: Session = Depends(get_db)):
     db_book = db.query(BookModel).filter(BookModel.id == book_id).first()
     if not db_book:

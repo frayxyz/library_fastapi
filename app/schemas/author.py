@@ -1,10 +1,14 @@
-from pydantic import BaseModel, ConfigDict, validator
+from pydantic import BaseModel, ConfigDict, Field, validator
 from datetime import datetime
 from typing import Optional
 
 class AuthorBase(BaseModel):
     name: str
-    birth_date: Optional[datetime] = None
+    birth_date: Optional[datetime] = Field(
+        None, 
+        example="18/02/2025"
+    )
+
 
 class AuthorCreate(AuthorBase):
     @validator("birth_date", pre=True)

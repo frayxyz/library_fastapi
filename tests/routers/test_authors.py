@@ -13,7 +13,7 @@ def test_create_author(client,db):
     response = client.post("/authors/", json=author_data)
 
     # Assert
-    assert response.status_code == 200
+    assert response.status_code == 201
     created_author = response.json()
     
     # Validate the response structure

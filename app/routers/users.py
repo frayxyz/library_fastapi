@@ -24,7 +24,29 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.post("/token")
+@router.post("/token", responses={
+    200: {
+        "description": "Successful authentication",
+        "content": {
+            "application/json": {
+                "example": {
+                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.PZXVw3E6f4U8pjNHvVmGNRb8Un5kXz4kKOfM5FBYVDQ",
+                    "token_type": "bearer"
+                }
+            }
+        }
+    },
+    401: {
+        "description": "Invalid credentials",
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Invalid credentials"
+                }
+            }
+        }
+    }
+})
 def login_for_access_token(user_credentials: UserAuth, db: Session = Depends(get_db)):
     """
     Autentica al usuario y genera un token JWT.
@@ -70,7 +92,26 @@ def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get
     return user
 
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT, responses={
+    204: {
+        "description": "User deleted successfully",
+        "content": {
+            "application/json": {
+                "example": None
+            }
+        }
+    },
+    404: {
+        "description": "User not found",
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "User not found"
+                }
+            }
+        }
+    }
+})
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     """
     Elimina un usuario por su ID.
