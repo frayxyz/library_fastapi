@@ -10,7 +10,6 @@ app = FastAPI()
 # Crear tablas en la base de datos
 Base.metadata.create_all(bind=engine)
 
-# Incluir routers
 app.include_router(users.router)
 app.include_router(authors.router)
 app.include_router(books.router)

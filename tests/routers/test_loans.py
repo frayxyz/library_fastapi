@@ -1,5 +1,4 @@
 from datetime import datetime
-import pytest
 from app.models import Book as BookModel, User as UserModel, Author as AuthorModel
 
 def test_borrow_book_success(client, db):
@@ -174,23 +173,23 @@ def test_return_book_not_borrowed_by_user(client, db):
     assert response.json() == {"detail": "Book not borrowed by you"}
 
 def test_borrow_book_without_valid_token(client):
-    # Arrange: Intentar prestar un libro sin proporcionar un token válido
-    headers = {}  # Sin encabezado de autorización
+    # Arrange
+    headers = {}
 
-    # Act: Hacer una solicitud para prestar un libro
+    # Act
     response = client.post("/loans/borrow/1", headers=headers)
 
-    # Assert: Verificar que la respuesta sea 401 Unauthorized
+    # Assert
     assert response.status_code == 401
     assert response.json() == {"detail": "Not authenticated"}
 
 def test_return_book_without_valid_token(client):
-    # Arrange: Intentar devolver un libro sin proporcionar un token válido
-    headers = {}  # Sin encabezado de autorización
+    # Arrange
+    headers = {} 
 
-    # Act: Hacer una solicitud para devolver un libro
+    # Act
     response = client.post("/loans/return/1", headers=headers)
 
-    # Assert: Verificar que la respuesta sea 401 Unauthorized
+    # Assert
     assert response.status_code == 401
     assert response.json() == {"detail": "Not authenticated"}    
