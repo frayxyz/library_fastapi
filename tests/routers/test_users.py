@@ -16,7 +16,7 @@ def sample_user_data() -> UserCreate:
 def test_create_user(client, db, sample_user_data):
     """Prueba la creación de un nuevo usuario"""
     response = client.post("/users/", json=sample_user_data)
-    assert response.status_code == 200  # Se espera un estado exitoso
+    assert response.status_code == 201
     response_data = response.json()
     assert response_data["name"] == sample_user_data["name"]
     assert response_data["email"] == sample_user_data["email"]
@@ -62,3 +62,43 @@ def test_login_with_invalid_credentials(client, db, sample_user_data):
 
     assert response.status_code == 401  # Se espera un error de autenticación
     assert response.json()["detail"] == "Invalid credentials"
+
+
+def test_get_user_by_id(client, db, sample_user_data):
+    """Prueba la obtención de un usuario por su ID."""
+    create_response = client.post("/users/", json=sample_user_data)
+    user_id = create_response.json()["id"]
+    response = client.get(f"/users/{user_id}")
+    assert response.status_code == 200
+    assert response.json()["email"] == sample_user_data["email"]
+
+@pytest.fixture
+def updated_user_data() -> dict:
+    """Datos actualizados para pruebas de actualización."""
+    return {
+        "name": "Updated User",
+        "email": "updated@example.com",
+        "password": "newpassword123"
+    }
+
+def test_update_user(client, db, sample_user_data, updated_user_data):
+    """Prueba la actualización de un usuario."""
+    create_response = client.post("/users/", json=sample_user_data)
+    user_id = create_response.json()["id"]
+
+    update_response = client.put(f"/users/{user_id}", json=updated_user_data)
+    assert update_response.status_code == 200
+    updated_data = update_response.json()
+    assert updated_data["name"] == updated_user_data["name"]
+    assert updated_data["email"] == updated_user_data["email"]
+
+def test_delete_user(client, db, sample_user_data):
+    """Prueba la eliminación de un usuario."""
+    create_response = client.post("/users/", json=sample_user_data)
+    user_id = create_response.json()["id"]
+
+    delete_response = client.delete(f"/users/{user_id}")
+    assert delete_response.status_code == 204
+
+    get_response = client.get(f"/users/{user_id}")
+    assert get_response.status_code == 404

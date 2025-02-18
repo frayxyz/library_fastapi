@@ -7,7 +7,15 @@ class UserBase(BaseModel):
     email: EmailStr
 
 class UserCreate(UserBase):
-    password: str  #pswd property added
+    password: str
+
+class UserAuth(BaseModel):    
+    email: EmailStr
+    password: str   
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None    
 
 class User(UserBase):
     id: int

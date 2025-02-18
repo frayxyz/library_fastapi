@@ -1,10 +1,7 @@
 from datetime import datetime
-from dotenv import load_dotenv
 import pytest
 from app.models import Book as BookModel, User as UserModel, Author as AuthorModel
 
-load_dotenv()
-# Prueba para prestar un libro exitosamente
 def test_borrow_book_success(client, db):
     # Crear un usuario y un libro de prueba
     user = UserModel(id=1, name="User 1", email= "user@gmail.com", password="12345")
@@ -30,7 +27,7 @@ def test_borrow_book_success(client, db):
 
     assert responseToken.status_code == 200  
     response_data = responseToken.json()
-    print("----------responsa data token es -> ",response_data['access_token'])
+    assert response_data['access_token'] != None
     
     # Simular autenticación de usuario
     headers = {"Authorization": "Bearer "+response_data['access_token']}

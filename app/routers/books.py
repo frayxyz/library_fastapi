@@ -46,4 +46,33 @@ def search_books( title: str | None = None, author: str | None = None, year: int
     return books
 
 
-#prestamo y devolucion de libros  (actualizar borrowed_by_id?)
+@router.get("/{book_id}", response_model=Book)
+def get_book(book_id: int, db: Session = Depends(get_db)):
+    book = db.query(BookModel).filter(BookModel.id == book_id).first()
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return book
+
+@router.put("/{book_id}", response_model=Book)
+def update_book(book_id: int, book_update: BookCreate, db: Session = Depends(get_db)):
+    db_book = db.query(BookModel).filter(BookModel.id == book_id).first()
+    if not db_book:
+        raise HTTPException(status_code=404, detail="Book not found")
+
+    # Actualizar los campos
+    for field, value in book_update.model_dump().items():
+        setattr(db_book, field, value)
+
+    db.commit()
+    db.refresh(db_book)
+    return db_book
+
+@router.delete("/{book_id}", response_model=dict)
+def delete_book(book_id: int, db: Session = Depends(get_db)):
+    db_book = db.query(BookModel).filter(BookModel.id == book_id).first()
+    if not db_book:
+        raise HTTPException(status_code=404, detail="Book not found")
+
+    db.delete(db_book)
+    db.commit()
+    return {"message": "Book deleted successfully"}

@@ -20,5 +20,4 @@ class Author(AuthorBase):
     id: int
 
     class Config:
-        #orm_mode = True v1
         model_config = ConfigDict(from_attributes=True)
