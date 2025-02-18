@@ -180,7 +180,7 @@ def test_borrow_book_without_valid_token(client):
     response = client.post("/loans/borrow/1", headers=headers)
 
     # Assert
-    assert response.status_code == 401
+    assert response.status_code == 403
     assert response.json() == {"detail": "Not authenticated"}
 
 def test_return_book_without_valid_token(client):
