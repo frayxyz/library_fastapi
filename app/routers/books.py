@@ -4,23 +4,16 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 from app.models import Book as BookModel, Author as AuthorModel
 from app.schemas import Book, BookCreate
-from ..database import SessionLocal
+from ..database import get_db
 
 router = APIRouter(prefix="/books", tags=["books"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/", response_model=Book)
 def create_book(book: BookCreate, db: Session = Depends(get_db)):
     db_author = db.query(AuthorModel).filter(AuthorModel.id == book.author_id).first()
     if not db_author:
         raise HTTPException(status_code=404, detail="Author not found")
-    new_book = BookModel(**book.dict())
+    new_book = BookModel(**book.model_dump())
     db.add(new_book)
     db.commit()
     db.refresh(new_book)

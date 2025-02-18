@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, ConfigDict, validator
 from datetime import datetime
 from typing import Optional
 
@@ -21,4 +21,4 @@ class Author(AuthorBase):
 
     class Config:
         #orm_mode = True v1
-        from_attributes = True #v2
+        model_config = ConfigDict(from_attributes=True)

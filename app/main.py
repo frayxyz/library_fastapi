@@ -4,17 +4,6 @@ from .routers import users, authors, books, loans
 
 app = FastAPI()
 
-from fastapi.middleware.cors import CORSMiddleware
-# Configura el middleware de CORS
-app.add_middleware(
-     CORSMiddleware,
-    allow_origins=["*"],  # Cambiar "*" por los dominios específicos en producción
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["Authorization", "Content-Type"],
-)
-
-
 # Crear tablas en la base de datos
 Base.metadata.create_all(bind=engine)
 

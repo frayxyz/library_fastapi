@@ -16,7 +16,7 @@ def get_db():
 
 @router.post("/", response_model=Author)
 def create_author(author: AuthorCreate, db: Session = Depends(get_db)):
-    new_author = AuthorModel(**author.dict())
+    new_author = AuthorModel(**author.model_dump())
     db.add(new_author)
     db.commit()
     db.refresh(new_author)
